@@ -254,15 +254,16 @@ const APPS = [
     tags:["Bar","Cocktails","Fiches techniques"]
   },
   {
-    id:"restaurant", nom:"Restaurant Croizat", cat:"infos", couleur:"#16262B",
-    accroche:"Menus et infos du restaurant d'application",
+    id:"restaurant", nom:"Restaurant Croizat", cat:"infos", couleur:"#C9431F",
+    accroche:"Menus, hôtel et infos du restaurant d'application",
+    une:"Les menus du midi, mois par mois",
     icone:"img/restaurant.png",
     url:"https://restaurant-croizat.netlify.app/",
-    pwa:false, captures:0,
-    stats:[["Menus","de la période"],["Photos","salle et assiettes"],["Infos","pratiques"]],
-    description:"Le site du restaurant d'application du lycée. Consulte les menus à venir pour préparer ton service et connaître la carte avant d'accueillir les clients.",
-    points:["Les menus de la période","Les photos de la salle et des assiettes","Les horaires et les infos pratiques"],
-    tags:["Restaurant d'application","Menus"]
+    pwa:false, captures:4,
+    stats:[["Mar–Ven","le midi"],["Menus","mois par mois"],["3","chambres"]],
+    description:"Le site du restaurant d'application du lycée. Consulte les menus à venir pour préparer ton service, découvre les chambres de l'hôtel d'application et la salle en images.",
+    points:["Les menus du midi, classés par mois","L'hôtel d'application et ses trois chambres","Les photos de la salle, des assiettes et des coulisses","Les infos pratiques et la réservation par téléphone"],
+    tags:["Restaurant d'application","Hôtel","Menus"]
   }
 ];
 const CATS = {cours:"Cours", infos:"Infos pratiques"};
@@ -315,7 +316,7 @@ function renderMain(){
   if(tab === "accueil"){
     const une = APPS.filter(a => a.captures >= 2);
     html += `<section class="sec">
-      <div class="sec-head"><h2>À la une</h2><p>Les applis de tes cours de techno</p></div>
+      <div class="sec-head"><h2>À la une</h2><p>Les applis de tes cours et du lycée</p></div>
       <div class="rail">${une.map(a => {
         const [s1,s2] = shots(a);
         return `<button class="promo" data-open="${a.id}">
