@@ -1,5 +1,5 @@
 // Boutique Applis Croizat — cache simple pour fonctionner hors connexion
-const CACHE = "applis-croizat-v4";
+const CACHE = "applis-croizat-v5";
 const FICHIERS = ["./", "index.html", "manifest.webmanifest",
   "img/icone-192.png", "img/icone-512.png", "img/apple-touch-icon.png",
   "img/fromages-aop.png", "img/regions-de-france.png", "img/socle-cocktails.png", "img/restaurant.png",
