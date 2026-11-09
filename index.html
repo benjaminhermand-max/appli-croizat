@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Applis Croizat</title>
+<meta name="description" content="Les applis de cours de M. Hermand pour les élèves du lycée Ambroise Croizat : fromages AOP, régions de France, cocktails, restaurant d'application.">
+<meta name="theme-color" content="#F5EDE0">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="img/icone-192.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Applis Croizat">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF7F1; --card:#FFFFFF; --ink:#1E1B18; --muted:#6E655C; --line:#ECE3D6;
+  --accent:#1F6F5C; --accent-ink:#FFFFFF; --chip:#F1E9DD; --shadow:0 1px 2px rgba(40,30,20,.06),0 4px 14px rgba(40,30,20,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+a{color:inherit}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+
+/* En-tête */
+header{padding:22px 0 8px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:48px;height:48px;border-radius:13px;box-shadow:var(--shadow)}
+.brand h1{font-family:Fraunces,Georgia,serif;font-style:italic;font-weight:600;font-size:1.65rem;line-height:1.1}
+.brand p{color:var(--muted);font-size:.85rem}
+.self-install{margin-top:16px;display:none;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow)}
+.self-install.show{display:flex}
+.self-install p{flex:1;font-size:.88rem;color:var(--muted)}
+.self-install strong{color:var(--ink);display:block;font-size:.95rem}
+
+/* Filtres */
+.chips{display:flex;gap:8px;margin:18px 0 6px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:7px 14px;border-radius:999px;background:var(--chip);font-size:.88rem;font-weight:500;white-space:nowrap;color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff}
+
+/* Liste d'applis */
+.section-title{font-weight:700;font-size:1.05rem;margin:18px 0 10px}
+.list{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+.app{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:var(--shadow);text-align:left;width:100%}
+.app img{width:64px;height:64px;border-radius:16px;flex:none;object-fit:cover;background:#eee}
+.app .meta{flex:1;min-width:0}
+.app h3{font-size:1rem;font-weight:600}
+.app .tag{color:var(--muted);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.app .badges{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.badge{font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--chip);color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-weight:600;font-size:.9rem;text-decoration:none;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn.small{padding:7px 14px;font-size:.85rem}
+
+footer{color:var(--muted);font-size:.8rem;text-align:center;padding:28px 0 36px}
+footer button{color:var(--accent);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+/* Fiche détaillée */
+.sheet-bg{position:fixed;inset:0;background:rgba(20,15,10,.45);opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-height:92vh;overflow:auto;background:var(--bg);border-radius:24px 24px 0 0;transform:translateY(100%);transition:transform .25s ease;z-index:11;padding:10px 0 calc(24px + env(safe-area-inset-bottom))}
+.open .sheet-bg{opacity:1;pointer-events:auto}
+.open .sheet{transform:none}
+.grab{width:40px;height:4px;border-radius:4px;background:#d8cdbd;margin:0 auto 14px}
+.sheet .wrap{max-width:640px}
+.d-head{display:flex;gap:16px;align-items:center}
+.d-head img{width:84px;height:84px;border-radius:20px;box-shadow:var(--shadow)}
+.d-head h2{font-size:1.35rem;line-height:1.2}
+.d-head p{color:var(--accent);font-size:.88rem;font-weight:600}
+.d-stats{display:flex;margin:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.d-stats div{flex:1;text-align:center;padding:10px 4px;font-size:.78rem;color:var(--muted)}
+.d-stats div+div{border-left:1px solid var(--line)}
+.d-stats strong{display:block;color:var(--ink);font-size:.98rem}
+.d-actions{display:flex;gap:10px}
+.d-actions .btn{flex:1;padding:12px}
+.d-body h4{font-size:1rem;margin:22px 0 6px}
+.d-body p{color:#3d3730}
+.d-body ul{list-style:none;display:grid;gap:8px;margin-top:10px}
+.d-body li{display:flex;gap:10px;align-items:flex-start}
+.d-body li::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:8px}
+
+/* Guide d'installation */
+.steps{display:grid;gap:10px;margin-top:8px;counter-reset:s}
+.step{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
+.step::before{counter-increment:s;content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;font-size:.85rem;display:grid;place-items:center}
+.os-switch{display:flex;gap:6px;margin-top:6px}
+.os-switch .chip{font-size:.8rem;padding:5px 12px}
+.kbd{display:inline-block;padding:0 6px;border-radius:6px;background:var(--chip);font-weight:600}
+
+/* QR */
+.qr{display:grid;place-items:center;margin:16px auto;background:#fff;padding:16px;border-radius:18px;width:max-content;box-shadow:var(--shadow)}
+.url{font-weight:600;word-break:break-all;text-align:center;color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <img src="img/icone-192.png" alt="">
+      <div>
+        <h1>Applis Croizat</h1>
+        <p>Lycée Ambroise Croizat · M.&nbsp;Hermand</p>
+      </div>
+    </div>
+    <div class="self-install" id="selfInstall">
+      <p><strong>Garde la boutique sur ton téléphone</strong>Retrouve toutes les applis en un geste.</p>
+      <button class="btn small" id="selfInstallBtn">Installer</button>
+    </div>
+  </header>
+
+  <nav class="chips" id="chips" aria-label="Catégories"></nav>
+  <main id="sections"></main>
+
+  <footer>
+    <p>Applis gratuites, sans compte, sans publicité.</p>
+    <p style="margin-top:6px"><button id="shareBtn">Partager la boutique (QR code)</button></p>
+  </footer>
+</div>
+
+<div id="sheetRoot">
+  <div class="sheet-bg" id="sheetBg"></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="grab"></div>
+    <div class="wrap" id="sheetContent"></div>
+  </div>
+</div>
+
+<script>
+const APPS = [
+  {
+    id:"fromages", nom:"Fromages AOP", cat:"cours",
+    accroche:"Les 47 fromages AOP de France",
+    icone:"img/fromages-aop.png",
+    url:"https://benjaminhermand-max.github.io/fromages-aop/",
+    pwa:true,
+    stats:[["47","AOP"],["4","rubriques"],["Hors ligne","disponible"]],
+    description:"Tout le cours sur les fromages, dans ta poche. De la fabrication du lait au plateau, révise les AOP région par région et teste-toi avec le quiz.",
+    points:["Les étapes de fabrication illustrées","Les AOP classées par région","Les grands fromages étrangers","Un glossaire avec recherche et tri par lait","Un quiz pour réviser avant les contrôles"]
+  },
+  {
+    id:"regions", nom:"Régions de France", cat:"cours",
+    accroche:"Carnet de route gastronomique",
+    icone:"img/regions-de-france.png",
+    url:"https://benjaminhermand-max.github.io/regions-de-france/",
+    pwa:true,
+    stats:[["13","régions"],["Carte","cliquable"],["Hors ligne","disponible"]],
+    description:"Voyage à travers les 13 régions de France. Pour chacune, découvre son identité, ses spécialités, ses fromages et ses vins.",
+    points:["Une carte de France cliquable","Fiches Identité · Assiette · Plateau · Cave","Un glossaire des plats et des fromages","Un quiz de révision"]
+  },
+  {
+    id:"cocktails", nom:"Socle des Cocktails", cat:"cours",
+    accroche:"Les 36 cocktails de référence",
+    icone:"img/socle-cocktails.png",
+    url:"https://benjaminhermand-max.github.io/socle-cocktails/",
+    pwa:true,
+    stats:[["36","cocktails"],["Fiches","techniques"],["Hors ligne","disponible"]],
+    description:"Les 36 cocktails du Socle des cocktails de référence, classés par alcool. Idéal pour préparer le bar et réviser les techniques.",
+    points:["La présentation de chaque alcool","Une fiche technique par cocktail","La verrerie et le matériel du bar","Le lexique du barman"]
+  },
+  {
+    id:"restaurant", nom:"Restaurant Croizat", cat:"infos",
+    accroche:"Menus et infos du restaurant d'application",
+    icone:"img/restaurant.png",
+    url:"https://restaurant-croizat.netlify.app/",
+    pwa:false,
+    stats:[["Menus","de la période"],["Photos","salle & assiettes"],["Infos","pratiques"]],
+    description:"Le site du restaurant d'application du lycée. Consulte les menus à venir pour préparer ton service et connaître la carte.",
+    points:["Les menus de la période","Les photos de la salle et des assiettes","Les horaires et infos pratiques"]
+  }
+];
+const CATS = {cours:"Mes cours", infos:"Infos pratiques"};
+
+/* ---------- Affichage de la liste ---------- */
+const $ = s => document.querySelector(s);
+let filtre = "tout";
+
+function renderChips(){
+  const items = [["tout","Tout"], ...Object.entries(CATS)];
+  $("#chips").innerHTML = items.map(([k,v]) =>
+    `<button class="chip" aria-pressed="${filtre===k}" data-k="${k}">${v}</button>`).join("");
+  $("#chips").querySelectorAll(".chip").forEach(b => b.onclick = () => {filtre=b.dataset.k; renderChips(); renderList();});
+}
+
+function renderList(){
+  const cats = filtre==="tout" ? Object.keys(CATS) : [filtre];
+  $("#sections").innerHTML = cats.map(c => {
+    const apps = APPS.filter(a => a.cat===c);
+    if(!apps.length) return "";
+    return `<h2 class="section-title">${CATS[c]}</h2><div class="list">${apps.map(a => `
+      <button class="app" data-id="${a.id}">
+        <img src="${a.icone}" alt="" loading="lazy">
+        <div class="meta">
+          <h3>${a.nom}</h3>
+          <div class="tag">${a.accroche}</div>
+          <div class="badges">${a.pwa?'<span class="badge">Hors connexion</span>':''}${a.pwa?'':'<span class="badge">Site web</span>'}</div>
+        </div>
+        <span class="btn small">Obtenir</span>
+      </button>`).join("")}</div>`;
+  }).join("");
+  document.querySelectorAll(".app").forEach(b => b.onclick = () => openApp(b.dataset.id));
+}
+
+/* ---------- Système (Android / iPhone) ---------- */
+const ua = navigator.userAgent;
+const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+let os = isIOS ? "ios" : "android";
+
+function guide(nomApp){
+  const n = `<strong>${nomApp}</strong>`;
+  if(os==="ios") return `
+    <div class="step"><div>Ouvre l'appli avec le bouton ci-dessus, <strong>dans Safari</strong>.</div></div>
+    <div class="step"><div>Touche le bouton <span class="kbd">Partager</span> (le carré avec une flèche vers le haut).</div></div>
+    <div class="step"><div>Choisis <span class="kbd">Sur l'écran d'accueil</span> puis <span class="kbd">Ajouter</span>.</div></div>
+    <div class="step"><div>L'icône de ${n} apparaît avec tes autres applis.</div></div>`;
+  return `
+    <div class="step"><div>Ouvre l'appli avec le bouton ci-dessus, <strong>dans Chrome</strong>.</div></div>
+    <div class="step"><div>Touche le menu <span class="kbd">⋮</span> en haut à droite.</div></div>
+    <div class="step"><div>Choisis <span class="kbd">Installer l'application</span> (ou <span class="kbd">Ajouter à l'écran d'accueil</span>).</div></div>
+    <div class="step"><div>L'icône de ${n} apparaît avec tes autres applis.</div></div>`;
+}
+
+/* ---------- Fiche détaillée ---------- */
+function openSheet(html){
+  $("#sheetContent").innerHTML = html;
+  document.body.classList.add("open");
+  $("#sheetRoot").classList.add("open");
+}
+function closeSheet(){ $("#sheetRoot").classList.remove("open"); document.body.classList.remove("open"); }
+$("#sheetBg").onclick = closeSheet;
+addEventListener("keydown", e => { if(e.key==="Escape") closeSheet(); });
+
+function openApp(id){
+  const a = APPS.find(x => x.id===id);
+  const draw = () => openSheet(`
+    <div class="d-head">
+      <img src="${a.icone}" alt="">
+      <div><h2 id="sheetTitle">${a.nom}</h2><p>M.&nbsp;Hermand · ${CATS[a.cat]}</p></div>
+    </div>
+    <div class="d-stats">${a.stats.map(([v,l]) => `<div><strong>${v}</strong>${l}</div>`).join("")}</div>
+    <div class="d-actions">
+      <a class="btn" href="${a.url}" target="_blank" rel="noopener">Ouvrir l'appli</a>
+    </div>
+    <div class="d-body">
+      <h4>À propos</h4>
+      <p>${a.description}</p>
+      <ul>${a.points.map(p => `<li>${p}</li>`).join("")}</ul>
+      <h4>L'installer sur ton téléphone</h4>
+      <div class="os-switch">
+        <button class="chip" data-os="android" aria-pressed="${os==='android'}">Android</button>
+        <button class="chip" data-os="ios" aria-pressed="${os==='ios'}">iPhone</button>
+      </div>
+      <div class="steps">${guide(a.nom)}</div>
+      ${a.pwa ? `<p style="margin-top:12px;font-size:.88rem;color:var(--muted)">Une fois installée, l'appli marche même sans réseau.</p>` : ""}
+    </div>
+    <div style="margin-top:22px"><button class="btn ghost" style="width:100%" id="closeBtn">Retour aux applis</button></div>`);
+  draw();
+  bindSheet();
+  function bindSheet(){
+    $("#closeBtn").onclick = closeSheet;
+    document.querySelectorAll(".os-switch .chip").forEach(b => b.onclick = () => {os=b.dataset.os; draw(); bindSheet();});
+  }
+}
+
+/* ---------- Installer la boutique elle-même ---------- */
+let deferred = null;
+const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; if(!standalone) $("#selfInstall").classList.add("show"); });
+if(isIOS && !standalone) $("#selfInstall").classList.add("show");
+$("#selfInstallBtn").onclick = async () => {
+  if(deferred){ deferred.prompt(); await deferred.userChoice; deferred=null; $("#selfInstall").classList.remove("show"); }
+  else openSheet(`<h2 id="sheetTitle" style="font-size:1.25rem">Installer la boutique</h2>
+    <div class="steps" style="margin-top:12px">
+      <div class="step"><div>Touche le bouton <span class="kbd">Partager</span> de Safari.</div></div>
+      <div class="step"><div>Choisis <span class="kbd">Sur l'écran d'accueil</span> puis <span class="kbd">Ajouter</span>.</div></div>
+    </div>
+    <div style="margin-top:22px"><button class="btn ghost" style="width:100%" onclick="closeSheet()">Fermer</button></div>`);
+};
+
+/* ---------- Partager (QR code à projeter en classe) ---------- */
+$("#shareBtn").onclick = () => {
+  const url = location.href.split(/[?#]/)[0];
+  openSheet(`<h2 id="sheetTitle" style="font-size:1.25rem;text-align:center">Scanne pour ouvrir la boutique</h2>
+    <div class="qr" id="qr"></div>
+    <p class="url">${url.replace(/^https?:\/\//,"")}</p>
+    <div style="margin-top:22px"><button class="btn ghost" style="width:100%" onclick="closeSheet()">Fermer</button></div>`);
+  const s = document.createElement("script");
+  s.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  s.onload = () => new QRCode(document.getElementById("qr"), {text:url, width:220, height:220, colorDark:"#1E1B18"});
+  if(window.QRCode) s.onload(); else document.head.appendChild(s);
+};
+
+/* ---------- Lancement ---------- */
+renderChips(); renderList();
+if("serviceWorker" in navigator && location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
