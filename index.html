@@ -4,297 +4,530 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Applis Croizat</title>
-<meta name="description" content="Les applis de cours de M. Hermand pour les élèves du lycée Ambroise Croizat : fromages AOP, régions de France, cocktails, restaurant d'application.">
-<meta name="theme-color" content="#F5EDE0">
+<meta name="description" content="La boutique des applis de cours de M. Hermand, lycée Ambroise Croizat (Moûtiers).">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131314" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="img/icone-192.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Applis Croizat">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#FBF7F1; --card:#FFFFFF; --ink:#1E1B18; --muted:#6E655C; --line:#ECE3D6;
-  --accent:#1F6F5C; --accent-ink:#FFFFFF; --chip:#F1E9DD; --shadow:0 1px 2px rgba(40,30,20,.06),0 4px 14px rgba(40,30,20,.06);
+  --bg:#FFFFFF; --surface:#F0F4F9; --surface2:#E9EEF6; --ink:#1F1F1F; --ink2:#444746; --line:#E1E3E1;
+  --green:#01875F; --green-ink:#FFFFFF; --green-soft:#C4EED0; --scrim:rgba(0,0,0,.5);
+  --r-icon:22%;
+}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#131314; --surface:#1E1F20; --surface2:#282A2C; --ink:#E3E3E3; --ink2:#C4C7C5; --line:#3C4043;
+        --green:#6DD58C; --green-ink:#00391C; --green-soft:#0F5223; --scrim:rgba(0,0,0,.7)}
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
-button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
-a{color:inherit}
-.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 Inter,Roboto,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
+img,svg{display:block}
+.wrap{max-width:760px;margin:0 auto}
 
-/* En-tête */
-header{padding:22px 0 8px}
-.brand{display:flex;align-items:center;gap:12px}
-.brand img{width:48px;height:48px;border-radius:13px;box-shadow:var(--shadow)}
-.brand h1{font-family:Fraunces,Georgia,serif;font-style:italic;font-weight:600;font-size:1.65rem;line-height:1.1}
-.brand p{color:var(--muted);font-size:.85rem}
-.self-install{margin-top:16px;display:none;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow)}
-.self-install.show{display:flex}
-.self-install p{flex:1;font-size:.88rem;color:var(--muted)}
-.self-install strong{color:var(--ink);display:block;font-size:.95rem}
+/* ---------- Barre du haut ---------- */
+.topbar{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(10px + env(safe-area-inset-top)) 16px 0}
+.topbar-row{display:flex;align-items:center;gap:12px;height:48px}
+.logo{width:34px;height:34px;border-radius:9px}
+.brand{flex:1;min-width:0}
+.brand b{display:block;font-size:1.2rem;font-weight:600;letter-spacing:-.01em;line-height:1.1}
+.brand span{font-size:.75rem;color:var(--ink2)}
+.icon-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--ink2);flex:none}
+.icon-btn:active{background:var(--surface2)}
+.tabs{display:flex;gap:4px;margin:6px -16px 0;padding:0 16px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;padding:12px 14px 13px;font-weight:500;font-size:.92rem;color:var(--ink2);white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--green)}
+.tab[aria-selected="true"]::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:var(--green)}
 
-/* Filtres */
-.chips{display:flex;gap:8px;margin:18px 0 6px;overflow-x:auto;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chip{padding:7px 14px;border-radius:999px;background:var(--chip);font-size:.88rem;font-weight:500;white-space:nowrap;color:var(--ink)}
-.chip[aria-pressed="true"]{background:var(--ink);color:#fff}
+/* ---------- Sections ---------- */
+main{padding-bottom:calc(32px + env(safe-area-inset-bottom))}
+.sec{margin-top:22px}
+.sec-head{padding:0 16px;margin-bottom:12px}
+.sec-head h2{font-size:1.1rem;font-weight:600;letter-spacing:-.01em}
+.sec-head p{font-size:.8rem;color:var(--ink2)}
 
-/* Liste d'applis */
-.section-title{font-weight:700;font-size:1.05rem;margin:18px 0 10px}
-.list{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
-.app{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:var(--shadow);text-align:left;width:100%}
-.app img{width:64px;height:64px;border-radius:16px;flex:none;object-fit:cover;background:#eee}
-.app .meta{flex:1;min-width:0}
-.app h3{font-size:1rem;font-weight:600}
-.app .tag{color:var(--muted);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.app .badges{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
-.badge{font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--chip);color:var(--muted)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-weight:600;font-size:.9rem;text-decoration:none;white-space:nowrap}
-.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
-.btn.small{padding:7px 14px;font-size:.85rem}
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 16px;scrollbar-width:none;scroll-padding:0 16px}
+.rail::-webkit-scrollbar{display:none}
+.rail>*{scroll-snap-align:start;flex:none}
 
-footer{color:var(--muted);font-size:.8rem;text-align:center;padding:28px 0 36px}
-footer button{color:var(--accent);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+/* Grandes cartes « À la une » */
+.promo{width:min(84vw,460px);text-align:left}
+.promo-art{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:var(--c);color:#fff}
+.promo-art::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 0% 100%,rgba(255,255,255,.2),transparent 60%)}
+.promo-txt{position:absolute;left:16px;top:16px;right:53%;z-index:1}
+.promo-txt small{display:block;font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
+.promo-txt b{display:block;font-size:clamp(.95rem,4.1vw,1.2rem);line-height:1.18;margin-top:4px;font-weight:700}
+.phone{position:absolute;width:26%;aspect-ratio:1/2;border-radius:12px;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.35);border:3px solid #111;background:#111}
+.phone img{width:100%;height:100%;object-fit:cover;object-position:top}
+.phone.p1{right:22%;top:12%;transform:rotate(-6deg)}
+.phone.p2{right:3%;top:24%;transform:rotate(5deg)}
+.promo-meta{display:flex;align-items:center;gap:12px;margin-top:10px}
+.promo-meta img{width:48px;height:48px;border-radius:var(--r-icon)}
+.promo-meta div{flex:1;min-width:0}
+.promo-meta b{display:block;font-weight:500;font-size:.95rem}
+.promo-meta span{font-size:.8rem;color:var(--ink2)}
 
-/* Fiche détaillée */
-.sheet-bg{position:fixed;inset:0;background:rgba(20,15,10,.45);opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
-.sheet{position:fixed;left:0;right:0;bottom:0;max-height:92vh;overflow:auto;background:var(--bg);border-radius:24px 24px 0 0;transform:translateY(100%);transition:transform .25s ease;z-index:11;padding:10px 0 calc(24px + env(safe-area-inset-bottom))}
-.open .sheet-bg{opacity:1;pointer-events:auto}
-.open .sheet{transform:none}
-.grab{width:40px;height:4px;border-radius:4px;background:#d8cdbd;margin:0 auto 14px}
-.sheet .wrap{max-width:640px}
-.d-head{display:flex;gap:16px;align-items:center}
-.d-head img{width:84px;height:84px;border-radius:20px;box-shadow:var(--shadow)}
-.d-head h2{font-size:1.35rem;line-height:1.2}
-.d-head p{color:var(--accent);font-size:.88rem;font-weight:600}
-.d-stats{display:flex;margin:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.d-stats div{flex:1;text-align:center;padding:10px 4px;font-size:.78rem;color:var(--muted)}
-.d-stats div+div{border-left:1px solid var(--line)}
-.d-stats strong{display:block;color:var(--ink);font-size:.98rem}
-.d-actions{display:flex;gap:10px}
-.d-actions .btn{flex:1;padding:12px}
-.d-body h4{font-size:1rem;margin:22px 0 6px}
-.d-body p{color:#3d3730}
-.d-body ul{list-style:none;display:grid;gap:8px;margin-top:10px}
-.d-body li{display:flex;gap:10px;align-items:flex-start}
-.d-body li::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:8px}
+/* Lignes de liste */
+.rows{padding:0 8px}
+.row{display:flex;align-items:center;gap:14px;width:100%;padding:8px;border-radius:14px;text-align:left}
+.row:active{background:var(--surface)}
+.row img{width:60px;height:60px;border-radius:var(--r-icon);flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.row .m{flex:1;min-width:0}
+.row b{display:block;font-weight:500;font-size:.98rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .s{display:block;font-size:.82rem;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .t{display:flex;align-items:center;gap:4px;font-size:.78rem;color:var(--ink2);margin-top:2px}
+.row .num{width:18px;text-align:center;color:var(--ink2);font-weight:500;flex:none}
 
-/* Guide d'installation */
-.steps{display:grid;gap:10px;margin-top:8px;counter-reset:s}
-.step{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
-.step::before{counter-increment:s;content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;font-size:.85rem;display:grid;place-items:center}
-.os-switch{display:flex;gap:6px;margin-top:6px}
-.os-switch .chip{font-size:.8rem;padding:5px 12px}
-.kbd{display:inline-block;padding:0 6px;border-radius:6px;background:var(--chip);font-weight:600}
+/* Tuiles */
+.tile{width:92px;text-align:left}
+.tile img{width:92px;height:92px;border-radius:var(--r-icon);box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.tile b{font-weight:500;font-size:.85rem;margin-top:8px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tile span{font-size:.75rem;color:var(--ink2)}
 
-/* QR */
-.qr{display:grid;place-items:center;margin:16px auto;background:#fff;padding:16px;border-radius:18px;width:max-content;box-shadow:var(--shadow)}
-.url{font-weight:600;word-break:break-all;text-align:center;color:var(--accent)}
+/* Bandeau d'installation */
+.install-card{display:none;margin:16px 16px 0;padding:14px;border-radius:16px;background:var(--surface);align-items:center;gap:12px}
+.install-card.show{display:flex}
+.install-card img{width:44px;height:44px;border-radius:11px}
+.install-card div{flex:1;font-size:.82rem;color:var(--ink2)}
+.install-card b{display:block;color:var(--ink);font-size:.92rem;font-weight:600}
+
+/* Boutons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 22px;border-radius:999px;background:var(--green);color:var(--green-ink);font-weight:600;font-size:.9rem;white-space:nowrap}
+.btn:active{filter:brightness(.92)}
+.btn.tonal{background:transparent;color:var(--green);box-shadow:inset 0 0 0 1px var(--line)}
+.btn.block{width:100%}
+
+footer{padding:28px 16px 8px;text-align:center;font-size:.78rem;color:var(--ink2)}
+
+/* ---------- Page détail ---------- */
+.page{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1),visibility 0s .28s;visibility:hidden}
+.page.open{transform:none;visibility:visible;transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+.page-bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:4px;padding:calc(8px + env(safe-area-inset-top)) 8px 8px;background:var(--bg)}
+.page-bar .mini{flex:1;display:flex;align-items:center;gap:10px;opacity:0;transition:opacity .2s;font-weight:500;min-width:0}
+.page-bar .mini img{width:28px;height:28px;border-radius:7px}
+.page.scrolled .page-bar .mini{opacity:1}
+.d{padding:0 16px calc(32px + env(safe-area-inset-bottom));max-width:760px;margin:0 auto}
+.d-hero{display:flex;gap:18px;align-items:center;margin-top:6px}
+.d-hero img{width:76px;height:76px;border-radius:var(--r-icon);box-shadow:0 1px 6px rgba(0,0,0,.18);flex:none}
+.d-hero h1{font-size:1.45rem;font-weight:600;line-height:1.2;letter-spacing:-.015em}
+.d-hero .dev{color:var(--green);font-weight:500;font-size:.92rem;margin-top:2px}
+.d-hero .sub{font-size:.76rem;color:var(--ink2)}
+.stats{display:flex;align-items:stretch;margin:22px -16px 0;padding:0 8px;overflow-x:auto;scrollbar-width:none}
+.stats::-webkit-scrollbar{display:none}
+.stat{flex:1 0 auto;min-width:84px;padding:0 12px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.stat+.stat{border-left:1px solid var(--line)}
+.stat b{font-weight:600;font-size:.92rem;height:22px;display:flex;align-items:center}
+.stat span{font-size:.74rem;color:var(--ink2);white-space:nowrap}
+.d-cta{display:flex;gap:10px;margin-top:22px}
+.d-cta .btn{flex:1}
+.shots{margin:24px -16px 0}
+.shot{width:132px;aspect-ratio:1/2;border-radius:10px;overflow:hidden;background:var(--surface2);box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.shot img{width:100%;height:100%;object-fit:cover}
+.d-sec{margin-top:26px}
+.d-sec h3{font-size:1.1rem;font-weight:600;letter-spacing:-.01em}
+.d-sec p{color:var(--ink2);margin-top:8px;font-size:.92rem}
+.feat{list-style:none;margin-top:12px;display:grid;gap:10px}
+.feat li{display:flex;gap:12px;align-items:flex-start;font-size:.92rem;color:var(--ink2)}
+.feat li svg{flex:none;color:var(--green);margin-top:1px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{padding:6px 14px;border-radius:8px;box-shadow:inset 0 0 0 1px var(--line);font-size:.8rem;font-weight:500;color:var(--ink2)}
+.info{display:grid;gap:14px;margin-top:12px}
+.info>div{display:flex;gap:14px;align-items:flex-start;font-size:.88rem}
+.info svg{flex:none;color:var(--ink2)}
+.info small{display:block;color:var(--ink2);font-size:.8rem}
+.info a{color:var(--green);word-break:break-all}
+
+/* ---------- Feuille du bas ---------- */
+.scrim{position:fixed;inset:0;z-index:30;background:var(--scrim);opacity:0;pointer-events:none;transition:opacity .2s}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:31;max-height:90vh;overflow-y:auto;background:var(--bg);border-radius:28px 28px 0 0;transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);padding:10px 20px calc(22px + env(safe-area-inset-bottom))}
+.sheet-on .scrim{opacity:1;pointer-events:auto}
+.sheet-on .sheet{transform:none}
+.grab{width:32px;height:4px;border-radius:4px;background:var(--line);margin:4px auto 18px}
+.sheet-in{max-width:560px;margin:0 auto}
+.sheet h2{font-size:1.2rem;font-weight:600}
+.lead{color:var(--ink2);font-size:.88rem;margin-top:4px}
+.seg{display:flex;padding:3px;border-radius:999px;background:var(--surface);margin:16px 0 4px}
+.seg button{flex:1;height:34px;border-radius:999px;font-weight:500;font-size:.85rem;color:var(--ink2)}
+.seg button[aria-pressed="true"]{background:var(--bg);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.steps{list-style:none;counter-reset:s;display:grid;gap:2px;margin-top:10px}
+.steps li{counter-increment:s;display:flex;gap:14px;align-items:flex-start;padding:9px 0;font-size:.92rem}
+.steps li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:var(--green-soft);color:var(--ink);font-weight:600;font-size:.82rem;display:grid;place-items:center}
+.kbd{display:inline-flex;align-items:center;gap:4px;padding:1px 8px;border-radius:6px;background:var(--surface2);font-weight:600;font-size:.86rem;white-space:nowrap;vertical-align:middle}
+.qr{display:grid;place-items:center;margin:18px auto 12px;padding:14px;border-radius:16px;background:#fff;width:max-content}
+.url{text-align:center;font-weight:600;color:var(--green);word-break:break-all}
+
+/* ---------- Visionneuse ---------- */
+.viewer{position:fixed;inset:0;z-index:40;background:#000;display:none;flex-direction:column}
+.viewer.open{display:flex}
+.vbar{display:flex;justify-content:space-between;align-items:center;padding:calc(8px + env(safe-area-inset-top)) 8px 8px;color:#fff}
+.vbar span{font-size:.85rem;opacity:.8;padding-right:12px}
+.vtrack{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.vtrack::-webkit-scrollbar{display:none}
+.vtrack>div{flex:none;width:100%;height:100%;scroll-snap-align:center;display:grid;place-items:center;padding:8px 16px calc(24px + env(safe-area-inset-bottom))}
+.vtrack img{max-width:100%;max-height:100%;border-radius:12px;object-fit:contain}
+
+@media (min-width:700px){ .shot{width:170px} }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="brand">
-      <img src="img/icone-192.png" alt="">
-      <div>
-        <h1>Applis Croizat</h1>
-        <p>Lycée Ambroise Croizat · M.&nbsp;Hermand</p>
-      </div>
-    </div>
-    <div class="self-install" id="selfInstall">
-      <p><strong>Garde la boutique sur ton téléphone</strong>Retrouve toutes les applis en un geste.</p>
-      <button class="btn small" id="selfInstallBtn">Installer</button>
-    </div>
-  </header>
 
-  <nav class="chips" id="chips" aria-label="Catégories"></nav>
-  <main id="sections"></main>
+<header class="topbar">
+  <div class="wrap">
+    <div class="topbar-row">
+      <img class="logo" src="img/icone-192.png" alt="">
+      <div class="brand"><b>Applis Croizat</b><span>Lycée Ambroise Croizat</span></div>
+      <button class="icon-btn" id="shareBtn" aria-label="Partager la boutique (QR code)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M3 11V3h8v8zm2-2h4V5H5zM3 21v-8h8v8zm2-2h4v-4H5zm8-8V3h8v8zm2-2h4V5h-4zm4 12v-2h2v2zm-6-6v-2h2v2zm2 2v-2h2v2zm-2 2v-2h2v2zm2 2v-2h2v2zm2-2v-2h2v2zm0-4v-2h2v2zm2 2v-2h2v2z"/></svg>
+      </button>
+    </div>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
+  </div>
+</header>
 
-  <footer>
-    <p>Applis gratuites, sans compte, sans publicité.</p>
-    <p style="margin-top:6px"><button id="shareBtn">Partager la boutique (QR code)</button></p>
-  </footer>
-</div>
+<main class="wrap" id="main"></main>
+
+<section class="page" id="page" aria-hidden="true"></section>
 
 <div id="sheetRoot">
-  <div class="sheet-bg" id="sheetBg"></div>
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
-    <div class="grab"></div>
-    <div class="wrap" id="sheetContent"></div>
+  <div class="scrim" id="scrim"></div>
+  <div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div><div class="sheet-in" id="sheetIn"></div></div>
+</div>
+
+<div class="viewer" id="viewer">
+  <div class="vbar">
+    <button class="icon-btn" id="vClose" aria-label="Fermer" style="color:#fff"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6z"/></svg></button>
+    <span id="vCount"></span>
   </div>
+  <div class="vtrack" id="vTrack"></div>
 </div>
 
 <script>
+/* =========================================================
+   CATALOGUE — pour ajouter une appli, copier un bloc.
+   Captures : img/captures/<id>-1.webp, <id>-2.webp…
+   ========================================================= */
 const APPS = [
   {
-    id:"fromages", nom:"Fromages AOP", cat:"cours",
+    id:"fromages", nom:"Fromages AOP", cat:"cours", couleur:"#546C86",
     accroche:"Les 47 fromages AOP de France",
+    une:"Révise tous les fromages AOP, du lait au plateau",
     icone:"img/fromages-aop.png",
     url:"https://benjaminhermand-max.github.io/fromages-aop/",
-    pwa:true,
-    stats:[["47","AOP"],["4","rubriques"],["Hors ligne","disponible"]],
-    description:"Tout le cours sur les fromages, dans ta poche. De la fabrication du lait au plateau, révise les AOP région par région et teste-toi avec le quiz.",
-    points:["Les étapes de fabrication illustrées","Les AOP classées par région","Les grands fromages étrangers","Un glossaire avec recherche et tri par lait","Un quiz pour réviser avant les contrôles"]
+    pwa:true, captures:5,
+    stats:[["47","fromages AOP"],["4","rubriques"],["10","trophées"]],
+    description:"Tout le cours sur les fromages, dans ta poche. De la fabrication au plateau, découvre les fromages AOP région par région, les grands fromages étrangers, et teste-toi avec l'espace quiz.",
+    points:["Les étapes de fabrication illustrées, du lait à l'affinage","Les AOP classées par région, avec leur famille de pâte","Un glossaire avec recherche et tri par lait","Un espace quiz et des trophées à débloquer"],
+    tags:["Techno restaurant","Fromages","Quiz"]
   },
   {
-    id:"regions", nom:"Régions de France", cat:"cours",
+    id:"regions", nom:"Régions de France", cat:"cours", couleur:"#B34F2B",
     accroche:"Carnet de route gastronomique",
+    une:"Voyage à travers les 13 régions et leurs spécialités",
     icone:"img/regions-de-france.png",
     url:"https://benjaminhermand-max.github.io/regions-de-france/",
-    pwa:true,
-    stats:[["13","régions"],["Carte","cliquable"],["Hors ligne","disponible"]],
-    description:"Voyage à travers les 13 régions de France. Pour chacune, découvre son identité, ses spécialités, ses fromages et ses vins.",
-    points:["Une carte de France cliquable","Fiches Identité · Assiette · Plateau · Cave","Un glossaire des plats et des fromages","Un quiz de révision"]
+    pwa:true, captures:5,
+    stats:[["13","régions"],["266","mots au glossaire"],["3","modes de quiz"]],
+    description:"Pour chaque région, découvre son identité, ses spécialités, ses fromages et sa cave. Tout ce qu'il faut pour conseiller un client et parler de la France gourmande avec assurance.",
+    points:["Une carte de France à explorer","Fiches Identité, Spécialités, Fromages et Cave","Un glossaire des plats, fromages et boissons","Un quiz de révision, jusqu'au défi final"],
+    tags:["Culture pro","Gastronomie","Quiz"]
   },
   {
-    id:"cocktails", nom:"Socle des Cocktails", cat:"cours",
+    id:"cocktails", nom:"Socle des Cocktails", cat:"cours", couleur:"#2A2820",
     accroche:"Les 36 cocktails de référence",
+    une:"De l'alcool à la fiche technique, tout le bar",
     icone:"img/socle-cocktails.png",
     url:"https://benjaminhermand-max.github.io/socle-cocktails/",
-    pwa:true,
-    stats:[["36","cocktails"],["Fiches","techniques"],["Hors ligne","disponible"]],
-    description:"Les 36 cocktails du Socle des cocktails de référence, classés par alcool. Idéal pour préparer le bar et réviser les techniques.",
-    points:["La présentation de chaque alcool","Une fiche technique par cocktail","La verrerie et le matériel du bar","Le lexique du barman"]
+    pwa:true, captures:5,
+    stats:[["36","cocktails"],["11","alcools"],["2025","édition"]],
+    description:"Les 36 cocktails du Socle des cocktails de référence (édition 2025), classés par alcool. Comprends chaque spiritueux, ses grands classiques, et réalise-les dans les règles.",
+    points:["La présentation de chaque alcool","Une fiche technique par cocktail, avec favoris","La verrerie, le matériel et les méthodes de réalisation","Le lexique du barman et le calcul du TAV"],
+    tags:["Bar","Cocktails","Fiches techniques"]
   },
   {
-    id:"restaurant", nom:"Restaurant Croizat", cat:"infos",
+    id:"restaurant", nom:"Restaurant Croizat", cat:"infos", couleur:"#16262B",
     accroche:"Menus et infos du restaurant d'application",
     icone:"img/restaurant.png",
     url:"https://restaurant-croizat.netlify.app/",
-    pwa:false,
-    stats:[["Menus","de la période"],["Photos","salle & assiettes"],["Infos","pratiques"]],
-    description:"Le site du restaurant d'application du lycée. Consulte les menus à venir pour préparer ton service et connaître la carte.",
-    points:["Les menus de la période","Les photos de la salle et des assiettes","Les horaires et infos pratiques"]
+    pwa:false, captures:0,
+    stats:[["Menus","de la période"],["Photos","salle et assiettes"],["Infos","pratiques"]],
+    description:"Le site du restaurant d'application du lycée. Consulte les menus à venir pour préparer ton service et connaître la carte avant d'accueillir les clients.",
+    points:["Les menus de la période","Les photos de la salle et des assiettes","Les horaires et les infos pratiques"],
+    tags:["Restaurant d'application","Menus"]
   }
 ];
-const CATS = {cours:"Mes cours", infos:"Infos pratiques"};
+const CATS = {cours:"Cours", infos:"Infos pratiques"};
+const TABS = [["accueil","Pour toi"],["cours","Cours"],["infos","Infos pratiques"]];
 
-/* ---------- Affichage de la liste ---------- */
+/* ---------- Icônes ---------- */
+const I = {
+  back:'<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="m7.8 13 5.6 5.6L12 20l-8-8 8-8 1.4 1.4L7.8 11H20v2z"/></svg>',
+  share:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 22a3 3 0 0 1-2.9-3.8l-7-4.1a3 3 0 1 1 0-4.2l7-4.1A3 3 0 1 1 18 8a3 3 0 0 1-2.1-.9l-7 4.1a3 3 0 0 1 0 1.6l7 4.1A3 3 0 1 1 18 22z"/></svg>',
+  check:'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="m9.55 18-5.7-5.7 1.43-1.43 4.27 4.28 9.18-9.18 1.42 1.43z"/></svg>',
+  offline:'<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21 0 9q2.6-2.4 5.7-3.7T12 4q3.2 0 6.3 1.3T24 9zm0-3.1 8.9-8.9q-1.9-1.4-4.2-2.2T12 6q-2.4 0-4.7.8T3.1 9z"/></svg>',
+  web:'<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm-1-2.1V18a2 2 0 0 1-2-2v-1l-4.8-4.8A8 8 0 0 0 11 19.9zm6.9-2.5A8 8 0 0 0 15 4.6V5a2 2 0 0 1-2 2h-2v2a1 1 0 0 1-1 1H8v2h6a1 1 0 0 1 1 1v3h1a2 2 0 0 1 1.9 1.4z"/></svg>',
+  person:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm-8 8v-2.8q0-.85.44-1.56A2.9 2.9 0 0 1 5.6 14.5q1.55-.78 3.15-1.16Q10.35 13 12 13t3.25.38q1.6.38 3.15 1.17.72.37 1.16 1.07.44.71.44 1.58V20z"/></svg>',
+  school:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21 5 17.2v-6L1 9l11-6 11 6v8h-2v-6.9l-2 1.1v6zm0-8.3L18.85 9 12 5.3 5.15 9zm0 6 5-2.7v-3.78L12 15l-5-2.78v3.78z"/></svg>',
+  link:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11 17H7q-2.08 0-3.54-1.46T2 12t1.46-3.54T7 7h4v2H7q-1.25 0-2.12.88T4 12t.88 2.13T7 15h4zm-3-4v-2h8v2zm5 4v-2h4q1.25 0 2.13-.87T20 12t-.87-2.12T17 9h-4V7h4q2.08 0 3.54 1.46T22 12t-1.46 3.54T17 17z"/></svg>',
+  dots:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="19" r="2.2"/></svg>',
+  iosShare:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V3m0 0L8 7m4-4 4 4M6 11H5v10h14V11h-1"/></svg>'
+};
+
+/* ---------- Outils ---------- */
 const $ = s => document.querySelector(s);
-let filtre = "tout";
+const shots = a => Array.from({length:a.captures}, (_,i) => `img/captures/${a.id}-${i+1}.webp`);
+const typeLine = a => a.pwa
+  ? `<span class="t">${I.offline}Fonctionne hors connexion</span>`
+  : `<span class="t">${I.web}Site web</span>`;
 
-function renderChips(){
-  const items = [["tout","Tout"], ...Object.entries(CATS)];
-  $("#chips").innerHTML = items.map(([k,v]) =>
-    `<button class="chip" aria-pressed="${filtre===k}" data-k="${k}">${v}</button>`).join("");
-  $("#chips").querySelectorAll(".chip").forEach(b => b.onclick = () => {filtre=b.dataset.k; renderChips(); renderList();});
+/* ---------- Onglets et accueil ---------- */
+let tab = "accueil";
+function renderTabs(){
+  $("#tabs").innerHTML = TABS.map(([k,v]) =>
+    `<button class="tab" role="tab" aria-selected="${tab===k}" data-k="${k}">${v}</button>`).join("");
+  document.querySelectorAll(".tab").forEach(b => b.onclick = () => { tab = b.dataset.k; renderTabs(); renderMain(); scrollTo(0,0); });
 }
 
-function renderList(){
-  const cats = filtre==="tout" ? Object.keys(CATS) : [filtre];
-  $("#sections").innerHTML = cats.map(c => {
-    const apps = APPS.filter(a => a.cat===c);
-    if(!apps.length) return "";
-    return `<h2 class="section-title">${CATS[c]}</h2><div class="list">${apps.map(a => `
-      <button class="app" data-id="${a.id}">
-        <img src="${a.icone}" alt="" loading="lazy">
-        <div class="meta">
-          <h3>${a.nom}</h3>
-          <div class="tag">${a.accroche}</div>
-          <div class="badges">${a.pwa?'<span class="badge">Hors connexion</span>':''}${a.pwa?'':'<span class="badge">Site web</span>'}</div>
+function row(a, n){
+  return `<button class="row" data-open="${a.id}">
+    ${n ? `<span class="num">${n}</span>` : ""}
+    <img src="${a.icone}" alt="">
+    <span class="m"><b>${a.nom}</b><span class="s">${a.accroche}</span>${typeLine(a)}</span>
+  </button>`;
+}
+
+function renderMain(){
+  let html = `<div class="install-card" id="installCard">
+      <img src="img/icone-192.png" alt="">
+      <div><b>Installe la boutique</b>Toutes tes applis de cours en un geste</div>
+      <button class="btn" id="installStore">Installer</button>
+    </div>`;
+
+  if(tab === "accueil"){
+    const une = APPS.filter(a => a.captures >= 2);
+    html += `<section class="sec">
+      <div class="sec-head"><h2>À la une</h2><p>Les applis de tes cours de techno</p></div>
+      <div class="rail">${une.map(a => {
+        const [s1,s2] = shots(a);
+        return `<button class="promo" data-open="${a.id}">
+          <div class="promo-art" style="--c:${a.couleur}">
+            <div class="promo-txt"><small>${CATS[a.cat]}</small><b>${a.une}</b></div>
+            <div class="phone p1"><img src="${s1}" alt="" loading="lazy"></div>
+            <div class="phone p2"><img src="${s2}" alt="" loading="lazy"></div>
+          </div>
+          <div class="promo-meta"><img src="${a.icone}" alt=""><div><b>${a.nom}</b><span>${a.accroche}</span></div></div>
+        </button>`; }).join("")}</div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><h2>Toutes les applis</h2></div>
+      <div class="rail">${APPS.map(a => `<button class="tile" data-open="${a.id}"><img src="${a.icone}" alt=""><b>${a.nom}</b><span>${CATS[a.cat]}</span></button>`).join("")}</div>
+    </section>
+    <section class="sec">
+      <div class="sec-head"><h2>Pour réviser</h2></div>
+      <div class="rows">${APPS.filter(a => a.cat==="cours").map((a,i) => row(a,i+1)).join("")}</div>
+    </section>`;
+  } else {
+    const list = APPS.filter(a => a.cat === tab);
+    html += `<section class="sec"><div class="sec-head"><h2>${CATS[tab]}</h2><p>${list.length} appli${list.length>1?"s":""}</p></div>
+      <div class="rows">${list.map(a => row(a)).join("")}</div></section>`;
+  }
+  html += `<footer>Applis gratuites, sans compte et sans publicité<br>Conçues par M.&nbsp;Hermand pour ses élèves</footer>`;
+  $("#main").innerHTML = html;
+  bindOpen($("#main"));
+  refreshInstallCard();
+  $("#installStore").onclick = installStore;
+}
+function bindOpen(root){
+  root.querySelectorAll("[data-open]").forEach(el => el.onclick = () => go(el.dataset.open));
+}
+
+/* ---------- Navigation (le bouton retour du téléphone fonctionne) ---------- */
+let pushed = false;
+function go(id){ pushed = true; location.hash = "#/" + id; }
+function back(){ if(pushed){ pushed = false; history.back(); } else location.hash = ""; }
+function route(){
+  const id = location.hash.replace(/^#\/?/, "");
+  const a = APPS.find(x => x.id === id);
+  closeSheet(); $("#viewer").classList.remove("open");
+  if(a) openPage(a); else closePage();
+}
+addEventListener("hashchange", route);
+
+/* ---------- Page détail ---------- */
+function openPage(a){
+  const caps = shots(a);
+  const autres = APPS.filter(x => x.id !== a.id);
+  const p = $("#page");
+  p.innerHTML = `
+    <div class="page-bar">
+      <button class="icon-btn" id="pBack" aria-label="Retour">${I.back}</button>
+      <div class="mini"><img src="${a.icone}" alt="">${a.nom}</div>
+      <button class="icon-btn" id="pShare" aria-label="Partager">${I.share}</button>
+    </div>
+    <div class="d">
+      <div class="d-hero">
+        <img src="${a.icone}" alt="">
+        <div>
+          <h1>${a.nom}</h1>
+          <div class="dev">M. Hermand</div>
+          <div class="sub">${a.pwa ? "Fonctionne hors connexion" : "Site web"} · Gratuit</div>
         </div>
-        <span class="btn small">Obtenir</span>
-      </button>`).join("")}</div>`;
-  }).join("");
-  document.querySelectorAll(".app").forEach(b => b.onclick = () => openApp(b.dataset.id));
+      </div>
+      <div class="stats">${a.stats.map(([v,l]) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`).join("")}<div class="stat"><b>Gratuit</b><span>sans pub</span></div></div>
+      <div class="d-cta">
+        ${a.pwa
+          ? `<button class="btn" id="pInstall">Installer</button><a class="btn tonal" href="${a.url}" target="_blank" rel="noopener">Ouvrir</a>`
+          : `<a class="btn" href="${a.url}" target="_blank" rel="noopener">Ouvrir le site</a><button class="btn tonal" id="pInstall">Ajouter à l'accueil</button>`}
+      </div>
+      ${caps.length ? `<div class="shots"><div class="rail">${caps.map((s,i) => `<button class="shot" data-shot="${i}"><img src="${s}" alt="Capture ${i+1} de ${a.nom}" loading="lazy"></button>`).join("")}</div></div>` : ""}
+      <section class="d-sec">
+        <h3>À propos de cette appli</h3>
+        <p>${a.description}</p>
+        <ul class="feat">${a.points.map(x => `<li>${I.check}<span>${x}</span></li>`).join("")}</ul>
+        <div class="chips">${a.tags.map(t => `<span class="chip">${t}</span>`).join("")}</div>
+      </section>
+      <section class="d-sec">
+        <h3>Infos sur l'appli</h3>
+        <div class="info">
+          <div>${I.person}<span>Développeur<small>M.&nbsp;Hermand, professeur de restaurant</small></span></div>
+          <div>${I.school}<span>Établissement<small>Lycée Ambroise Croizat, Moûtiers</small></span></div>
+          <div>${I.link}<span>Adresse<small><a href="${a.url}" target="_blank" rel="noopener">${a.url.replace(/^https:\/\//,"").replace(/\/$/,"")}</a></small></span></div>
+        </div>
+      </section>
+      <section class="d-sec">
+        <h3>Autres applis de M.&nbsp;Hermand</h3>
+        <div class="rail" style="margin:14px -16px 0">${autres.map(x => `<button class="tile" data-open="${x.id}"><img src="${x.icone}" alt=""><b>${x.nom}</b><span>${CATS[x.cat]}</span></button>`).join("")}</div>
+      </section>
+    </div>`;
+  p.classList.add("open"); p.setAttribute("aria-hidden","false");
+  p.scrollTop = 0; p.classList.remove("scrolled");
+  document.body.style.overflow = "hidden";
+  $("#pBack").onclick = back;
+  $("#pShare").onclick = () => shareApp(a);
+  $("#pInstall").onclick = () => showInstall(a);
+  p.querySelectorAll("[data-shot]").forEach(b => b.onclick = () => openViewer(a, +b.dataset.shot));
+  bindOpen(p);
 }
+function closePage(){
+  const p = $("#page");
+  p.classList.remove("open"); p.setAttribute("aria-hidden","true");
+  document.body.style.overflow = "";
+}
+$("#page").addEventListener("scroll", e => e.target.classList.toggle("scrolled", e.target.scrollTop > 90));
 
-/* ---------- Système (Android / iPhone) ---------- */
+/* ---------- Feuille du bas ---------- */
+function openSheet(html){ $("#sheetIn").innerHTML = html; $("#sheetRoot").classList.add("sheet-on"); }
+function closeSheet(){ $("#sheetRoot").classList.remove("sheet-on"); }
+$("#scrim").onclick = closeSheet;
+
+/* ---------- Guide d'installation ---------- */
 const ua = navigator.userAgent;
-const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 let os = isIOS ? "ios" : "android";
 
-function guide(nomApp){
-  const n = `<strong>${nomApp}</strong>`;
-  if(os==="ios") return `
-    <div class="step"><div>Ouvre l'appli avec le bouton ci-dessus, <strong>dans Safari</strong>.</div></div>
-    <div class="step"><div>Touche le bouton <span class="kbd">Partager</span> (le carré avec une flèche vers le haut).</div></div>
-    <div class="step"><div>Choisis <span class="kbd">Sur l'écran d'accueil</span> puis <span class="kbd">Ajouter</span>.</div></div>
-    <div class="step"><div>L'icône de ${n} apparaît avec tes autres applis.</div></div>`;
+function steps(a){
+  if(os === "ios") return `
+    <li><span>Touche <b>Ouvrir ${a.nom}</b> ci-dessous. L'appli s'ouvre dans <b>Safari</b>.</span></li>
+    <li><span>Touche le bouton <span class="kbd">${I.iosShare} Partager</span> en bas de l'écran.</span></li>
+    <li><span>Choisis <span class="kbd">Sur l'écran d'accueil</span> puis <span class="kbd">Ajouter</span>.</span></li>
+    <li><span>L'icône de ${a.nom} apparaît avec tes autres applis.</span></li>`;
   return `
-    <div class="step"><div>Ouvre l'appli avec le bouton ci-dessus, <strong>dans Chrome</strong>.</div></div>
-    <div class="step"><div>Touche le menu <span class="kbd">⋮</span> en haut à droite.</div></div>
-    <div class="step"><div>Choisis <span class="kbd">Installer l'application</span> (ou <span class="kbd">Ajouter à l'écran d'accueil</span>).</div></div>
-    <div class="step"><div>L'icône de ${n} apparaît avec tes autres applis.</div></div>`;
+    <li><span>Touche <b>Ouvrir ${a.nom}</b> ci-dessous. L'appli s'ouvre dans <b>Chrome</b>.</span></li>
+    <li><span>Touche le menu <span class="kbd">${I.dots}</span> en haut à droite.</span></li>
+    <li><span>Choisis <span class="kbd">Installer l'application</span> ou <span class="kbd">Ajouter à l'écran d'accueil</span>.</span></li>
+    <li><span>L'icône de ${a.nom} apparaît avec tes autres applis.</span></li>`;
 }
-
-/* ---------- Fiche détaillée ---------- */
-function openSheet(html){
-  $("#sheetContent").innerHTML = html;
-  document.body.classList.add("open");
-  $("#sheetRoot").classList.add("open");
-}
-function closeSheet(){ $("#sheetRoot").classList.remove("open"); document.body.classList.remove("open"); }
-$("#sheetBg").onclick = closeSheet;
-addEventListener("keydown", e => { if(e.key==="Escape") closeSheet(); });
-
-function openApp(id){
-  const a = APPS.find(x => x.id===id);
-  const draw = () => openSheet(`
-    <div class="d-head">
-      <img src="${a.icone}" alt="">
-      <div><h2 id="sheetTitle">${a.nom}</h2><p>M.&nbsp;Hermand · ${CATS[a.cat]}</p></div>
-    </div>
-    <div class="d-stats">${a.stats.map(([v,l]) => `<div><strong>${v}</strong>${l}</div>`).join("")}</div>
-    <div class="d-actions">
-      <a class="btn" href="${a.url}" target="_blank" rel="noopener">Ouvrir l'appli</a>
-    </div>
-    <div class="d-body">
-      <h4>À propos</h4>
-      <p>${a.description}</p>
-      <ul>${a.points.map(p => `<li>${p}</li>`).join("")}</ul>
-      <h4>L'installer sur ton téléphone</h4>
-      <div class="os-switch">
-        <button class="chip" data-os="android" aria-pressed="${os==='android'}">Android</button>
-        <button class="chip" data-os="ios" aria-pressed="${os==='ios'}">iPhone</button>
+function showInstall(a){
+  const draw = () => {
+    openSheet(`
+      <div style="display:flex;gap:14px;align-items:center">
+        <img src="${a.icone}" alt="" style="width:52px;height:52px;border-radius:12px">
+        <div><h2>Installer ${a.nom}</h2><p class="lead">${a.pwa ? "Elle marchera ensuite même sans réseau." : "Ajoute un raccourci vers le site."}</p></div>
       </div>
-      <div class="steps">${guide(a.nom)}</div>
-      ${a.pwa ? `<p style="margin-top:12px;font-size:.88rem;color:var(--muted)">Une fois installée, l'appli marche même sans réseau.</p>` : ""}
-    </div>
-    <div style="margin-top:22px"><button class="btn ghost" style="width:100%" id="closeBtn">Retour aux applis</button></div>`);
+      <div class="seg" role="group" aria-label="Ton téléphone">
+        <button data-os="android" aria-pressed="${os==="android"}">Android</button>
+        <button data-os="ios" aria-pressed="${os==="ios"}">iPhone</button>
+      </div>
+      <ol class="steps">${steps(a)}</ol>
+      <div style="display:grid;gap:10px;margin-top:14px">
+        <a class="btn block" href="${a.url}" target="_blank" rel="noopener">Ouvrir ${a.nom}</a>
+        <button class="btn tonal block" id="sClose">Plus tard</button>
+      </div>`);
+    document.querySelectorAll(".seg button").forEach(b => b.onclick = () => { os = b.dataset.os; draw(); });
+    $("#sClose").onclick = closeSheet;
+  };
   draw();
-  bindSheet();
-  function bindSheet(){
-    $("#closeBtn").onclick = closeSheet;
-    document.querySelectorAll(".os-switch .chip").forEach(b => b.onclick = () => {os=b.dataset.os; draw(); bindSheet();});
-  }
 }
 
 /* ---------- Installer la boutique elle-même ---------- */
 let deferred = null;
-const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
-addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; if(!standalone) $("#selfInstall").classList.add("show"); });
-if(isIOS && !standalone) $("#selfInstall").classList.add("show");
-$("#selfInstallBtn").onclick = async () => {
-  if(deferred){ deferred.prompt(); await deferred.userChoice; deferred=null; $("#selfInstall").classList.remove("show"); }
-  else openSheet(`<h2 id="sheetTitle" style="font-size:1.25rem">Installer la boutique</h2>
-    <div class="steps" style="margin-top:12px">
-      <div class="step"><div>Touche le bouton <span class="kbd">Partager</span> de Safari.</div></div>
-      <div class="step"><div>Choisis <span class="kbd">Sur l'écran d'accueil</span> puis <span class="kbd">Ajouter</span>.</div></div>
-    </div>
-    <div style="margin-top:22px"><button class="btn ghost" style="width:100%" onclick="closeSheet()">Fermer</button></div>`);
-};
+const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+function refreshInstallCard(){
+  const c = $("#installCard");
+  if(c) c.classList.toggle("show", !standalone && !!(deferred || isIOS));
+}
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; refreshInstallCard(); });
+addEventListener("appinstalled", () => { deferred = null; refreshInstallCard(); });
+async function installStore(){
+  if(deferred){ deferred.prompt(); await deferred.userChoice; deferred = null; refreshInstallCard(); return; }
+  openSheet(`<h2>Installer la boutique</h2>
+    <ol class="steps">
+      <li><span>Touche le bouton <span class="kbd">${I.iosShare} Partager</span> de Safari.</span></li>
+      <li><span>Choisis <span class="kbd">Sur l'écran d'accueil</span> puis <span class="kbd">Ajouter</span>.</span></li>
+    </ol>
+    <button class="btn tonal block" style="margin-top:14px" onclick="closeSheet()">Fermer</button>`);
+}
 
-/* ---------- Partager (QR code à projeter en classe) ---------- */
-$("#shareBtn").onclick = () => {
-  const url = location.href.split(/[?#]/)[0];
-  openSheet(`<h2 id="sheetTitle" style="font-size:1.25rem;text-align:center">Scanne pour ouvrir la boutique</h2>
+/* ---------- Partage ---------- */
+const baseUrl = () => location.href.split("#")[0].split("?")[0];
+async function shareApp(a){
+  const url = baseUrl() + "#/" + a.id;
+  if(navigator.share){ try{ await navigator.share({title:a.nom, text:a.accroche, url}); return; }catch(e){ if(e.name === "AbortError") return; } }
+  showQR(url, a.nom);
+}
+function showQR(url, titre){
+  openSheet(`<h2 style="text-align:center">${titre}</h2>
+    <p class="lead" style="text-align:center">Scanne avec l'appareil photo de ton téléphone</p>
     <div class="qr" id="qr"></div>
     <p class="url">${url.replace(/^https?:\/\//,"")}</p>
-    <div style="margin-top:22px"><button class="btn ghost" style="width:100%" onclick="closeSheet()">Fermer</button></div>`);
+    <button class="btn tonal block" style="margin-top:18px" onclick="closeSheet()">Fermer</button>`);
+  const draw = () => new QRCode(document.getElementById("qr"), {text:url, width:220, height:220, colorDark:"#1F1F1F"});
+  if(window.QRCode) return draw();
   const s = document.createElement("script");
   s.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
-  s.onload = () => new QRCode(document.getElementById("qr"), {text:url, width:220, height:220, colorDark:"#1E1B18"});
-  if(window.QRCode) s.onload(); else document.head.appendChild(s);
-};
+  s.onload = draw; document.head.appendChild(s);
+}
+$("#shareBtn").onclick = () => showQR(baseUrl(), "Applis Croizat");
+
+/* ---------- Visionneuse de captures ---------- */
+function openViewer(a, i){
+  const caps = shots(a), t = $("#vTrack");
+  t.innerHTML = caps.map(s => `<div><img src="${s}" alt=""></div>`).join("");
+  $("#viewer").classList.add("open");
+  const upd = () => $("#vCount").textContent = `${Math.round(t.scrollLeft / t.clientWidth) + 1} / ${caps.length}`;
+  requestAnimationFrame(() => { t.scrollLeft = i * t.clientWidth; upd(); });
+  t.onscroll = upd;
+}
+$("#vClose").onclick = () => $("#viewer").classList.remove("open");
+addEventListener("keydown", e => {
+  if(e.key !== "Escape") return;
+  if($("#viewer").classList.contains("open")) $("#viewer").classList.remove("open");
+  else if($("#sheetRoot").classList.contains("sheet-on")) closeSheet();
+  else if(location.hash) back();
+});
 
 /* ---------- Lancement ---------- */
-renderChips(); renderList();
-if("serviceWorker" in navigator && location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
+renderTabs(); renderMain(); route();
+if("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
 </script>
 </body>
 </html>
